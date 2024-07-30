@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Question App</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="data.js"></script>
+</head>
+<body>
+    <h1>Random Question App</h1>
+    <button id="prevButton" disabled>Previous Question</button>
+    <button id="questionButton">Next Question</button>
+    <button id="answerButton" disabled>Show Answer</button>
+    <h2 id="blockDisplay"></h2>
+    <p id="questionDisplay"></p>
+    <div id="answerContainer">
+        <p id="answerDisplay"></p>
+    </div>
+
+    <script>
+        let currentQuestionIndex = 0;
+        let currentQuestion = null;
+
+        function displayQuestion() {
+            currentQuestion = data[currentQuestionIndex];
+            document.getElementById('blockDisplay').textContent = `БЛОК: ${currentQuestion.block}`;
+            document.getElementById('questionDisplay').textContent = currentQuestion.question;
+            document.getElementById('answerDisplay').textContent = '';
+            document.getElementById('answerButton').disabled = false;
+            document.getElementById('answerContainer').style.display = 'none';
+            document.getElementById('prevButton').disabled = currentQuestionIndex === 0;
+        }
+
+        document.getElementById('questionButton').addEventListener('click', () => {
+            currentQuestionIndex = (currentQuestionIndex + 1) % data.length;
+            displayQuestion();
+        });
+
+        document.getElementById('prevButton').addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+            } else {
+                currentQuestionIndex = data.length - 1;
+            }
+            displayQuestion();
+        });
+
+        document.getElementById('answerButton').addEventListener('click', () => {
+            if (currentQuestion) {
+                document.getElementById('answerDisplay').textContent = currentQuestion.answer;
+                document.getElementById('answerContainer').style.display = 'block';
+            }
+        });
+
+        // Инициализация с первого вопроса
+        displayQuestion();
+    </script>
+</body>
+</html>
